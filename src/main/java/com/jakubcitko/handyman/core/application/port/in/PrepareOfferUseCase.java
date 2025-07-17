@@ -8,9 +8,11 @@ import java.util.UUID;
 
 public interface PrepareOfferUseCase extends GenerateUploadUrlUseCase {
     void prepareOffer(PrepareOfferCommand command);
+
     record PrepareOfferCommand(
             UUID serviceRequestId,
             BigDecimal estimatedCost,
             List<TimeSlot> availableTimeSlots
-    ) {}
+    ) {
+    }
 }

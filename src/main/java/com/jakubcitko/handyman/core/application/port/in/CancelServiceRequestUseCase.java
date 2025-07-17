@@ -4,7 +4,9 @@ import java.util.UUID;
 
 public interface CancelServiceRequestUseCase {
     void cancelServiceRequest(CancelServiceRequestCommand command);
-    record CancelServiceRequestCommand (
+
+    record CancelServiceRequestCommand(
             UUID serviceRequestId
-    ) {}
+    ) {
+    }
 }

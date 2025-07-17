@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public interface CreateServiceRequestUseCase {
     void createServiceRequest(CreateServiceRequestCommand command);
+
     record CreateServiceRequestCommand(
             String title,
             String description,
@@ -13,7 +14,8 @@ public interface CreateServiceRequestUseCase {
             String customerEmail,
             AddressData address,
             List<FileReferenceInput> attachments
-    ) {}
+    ) {
+    }
 
     record AddressData(
             String street,
@@ -21,10 +23,12 @@ public interface CreateServiceRequestUseCase {
             String flatNumber,
             String city,
             String postalCode
-    ) {}
+    ) {
+    }
 
     record FileReferenceInput(
             UUID fileUid,
             String originalFilename
-    ) {}
+    ) {
+    }
 }

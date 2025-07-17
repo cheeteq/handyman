@@ -4,7 +4,9 @@ import java.util.UUID;
 
 public interface RejectOfferUseCase {
     void rejectOffer(RejectOfferCommand command);
+
     record RejectOfferCommand(
             UUID serviceRequestId
-    ) {}
+    ) {
+    }
 }

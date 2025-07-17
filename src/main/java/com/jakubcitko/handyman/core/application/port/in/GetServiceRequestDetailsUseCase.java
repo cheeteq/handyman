@@ -7,10 +7,13 @@ import java.util.UUID;
 
 public interface GetServiceRequestDetailsUseCase {
     ServiceRequestDetails query(GetServiceRequestDetailsQuery query);
+
     record GetServiceRequestDetailsQuery(
             UUID serviceRequestId,
             UUID requesterId
-    ) {}
+    ) {
+    }
+
     record ServiceRequestDetails(
             UUID id,
             String title,
@@ -21,11 +24,22 @@ public interface GetServiceRequestDetailsUseCase {
             List<FileReferenceDetails> attachments,
             String handymanNote,
             RevenueDetails revenue
-    ) {}
+    ) {
+    }
 
-    record AddressDetails(String street, String city, String postalCode) {}
-    record OfferDetails(BigDecimal estimatedCost, List<TimeSlotDetails> availableTimeSlots, TimeSlotDetails chosenTimeSlot) {}
-    record TimeSlotDetails(LocalDateTime start, LocalDateTime end) {}
-    record FileReferenceDetails(UUID fileId, String originalFilename) {}
-    record RevenueDetails(BigDecimal revenue, BigDecimal costs, BigDecimal profit) {}
+    record AddressDetails(String street, String city, String postalCode) {
+    }
+
+    record OfferDetails(BigDecimal estimatedCost, List<TimeSlotDetails> availableTimeSlots,
+                        TimeSlotDetails chosenTimeSlot) {
+    }
+
+    record TimeSlotDetails(LocalDateTime start, LocalDateTime end) {
+    }
+
+    record FileReferenceDetails(UUID fileId, String originalFilename) {
+    }
+
+    record RevenueDetails(BigDecimal revenue, BigDecimal costs, BigDecimal profit) {
+    }
 }

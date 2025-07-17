@@ -5,9 +5,11 @@ import java.util.UUID;
 
 public interface SettleServiceRequestUseCase {
     void settleServiceRequest(SettleServiceRequestCommand command);
-    record SettleServiceRequestCommand (
+
+    record SettleServiceRequestCommand(
             UUID serviceRequestId,
             BigDecimal finalRevenue,
             BigDecimal costsOfParts
-    ) {}
+    ) {
+    }
 }

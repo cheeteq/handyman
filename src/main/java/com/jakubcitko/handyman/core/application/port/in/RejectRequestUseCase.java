@@ -4,8 +4,10 @@ import java.util.UUID;
 
 public interface RejectRequestUseCase {
     void rejectRequest(RejectRequestCommand command);
+
     record RejectRequestCommand(
             UUID serviceRequestId,
             String note
-    ) {}
+    ) {
+    }
 }
