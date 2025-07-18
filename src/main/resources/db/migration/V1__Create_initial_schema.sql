@@ -1,0 +1,67 @@
+CREATE TABLE customers
+(
+    id            UUID PRIMARY KEY,
+    name          VARCHAR(255) NOT NULL,
+    phone_number  VARCHAR(50),
+    email_address VARCHAR(255) NOT NULL UNIQUE,
+    version       BIGINT       NOT NULL DEFAULT 0
+);
+
+CREATE TABLE addresses
+(
+    id            UUID PRIMARY KEY,
+    customer_id   UUID         NOT NULL,
+    street        VARCHAR(255) NOT NULL,
+    street_number VARCHAR(20)  NOT NULL,
+    flat_number   VARCHAR(20),
+    city          VARCHAR(100) NOT NULL,
+    postal_code   VARCHAR(20)  NOT NULL,
+    CONSTRAINT fk_customer
+        FOREIGN KEY (customer_id)
+            REFERENCES customers (id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE service_requests
+(
+    id                   UUID PRIMARY KEY,
+    customer_id          UUID         NOT NULL,
+    address_id           UUID         NOT NULL,
+    title                VARCHAR(255) NOT NULL,
+    description_text     TEXT,
+    status               VARCHAR(50)  NOT NULL,
+    offer_estimated_cost DECIMAL(10, 2),
+    chosen_slot_start    TIMESTAMP,
+    chosen_slot_end      TIMESTAMP,
+    final_revenue        DECIMAL(10, 2),
+    costs_of_parts       DECIMAL(10, 2),
+    internal_note        TEXT,
+    version              BIGINT       NOT NULL DEFAULT 0,
+    CONSTRAINT fk_sr_customer
+        FOREIGN KEY (customer_id)
+            REFERENCES customers (id),
+    CONSTRAINT fk_sr_address
+        FOREIGN KEY (address_id)
+            REFERENCES addresses (id)
+);
+
+CREATE TABLE offer_available_time_slots
+(
+    service_request_id UUID      NOT NULL,
+    start_date_time    TIMESTAMP NOT NULL,
+    end_date_time      TIMESTAMP NOT NULL,
+    CONSTRAINT fk_oats_service_request
+        FOREIGN KEY (service_request_id)
+            REFERENCES service_requests (id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE service_request_attachments
+(
+    service_request_id UUID NOT NULL,
+    attachment_id      UUID NOT NULL,
+    CONSTRAINT fk_sra_service_request
+        FOREIGN KEY (service_request_id)
+            REFERENCES service_requests (id)
+            ON DELETE CASCADE
+);

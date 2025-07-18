@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:16
+    container_name: handyman_postgres
+    environment:
+      POSTGRES_USER: handyman_user
+      POSTGRES_PASSWORD: Haslo123!
+      POSTGRES_DB: handyman_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U handyman_user -d handyman_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  handyman-app:
+    build: .
+    container_name: handyman_app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/handyman_db
+      - SPRING_DATASOURCE_USERNAME=handyman_user
+      - SPRING_DATASOURCE_PASSWORD=Haslo123!
+    depends_on:
+      postgres-db:
+        condition: service_healthy
