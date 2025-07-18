@@ -1,6 +1,7 @@
 package com.jakubcitko.handyman.core.domain.model;
 
 import com.jakubcitko.handyman.core.domain.exception.InvalidRequestStateException;
+import com.jakubcitko.handyman.core.domain.exception.TimeSlotMismatchException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -53,6 +54,13 @@ public class ServiceRequest {
     public void acceptOffer(TimeSlot chosenTimeSlot) {
         if (!status.equals(ServiceRequestStatusEnum.OFFER_CREATED))
             throw new InvalidRequestStateException("Cannot accept an offer, invalid status: " + status + ". Expected: OFFER_CREATED.");
+
+        if (this.offer == null)
+            throw new IllegalStateException("Cannot accept offer when no offer has been prepared.");
+
+        boolean isSlotAvailable = this.offer.getAvailableTimeSlots().contains(chosenTimeSlot);
+        if (!isSlotAvailable)
+            throw new TimeSlotMismatchException("The chosen time slot is not one of the available options.");
 
         this.chosenTimeSlot = chosenTimeSlot;
         this.status = ServiceRequestStatusEnum.OFFER_ACCEPTED;

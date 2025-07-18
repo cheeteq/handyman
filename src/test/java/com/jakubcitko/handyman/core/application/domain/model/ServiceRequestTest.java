@@ -1,5 +1,7 @@
 package com.jakubcitko.handyman.core.application.domain.model;
 
+import com.jakubcitko.handyman.core.domain.exception.InvalidRequestStateException;
+import com.jakubcitko.handyman.core.domain.exception.TimeSlotMismatchException;
 import com.jakubcitko.handyman.core.domain.model.ServiceRequest;
 import com.jakubcitko.handyman.core.domain.model.ServiceRequestStatusEnum;
 import com.jakubcitko.handyman.core.domain.model.TimeSlot;
@@ -7,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,14 +55,14 @@ public class ServiceRequestTest {
         BigDecimal estimatedCost = BigDecimal.valueOf(150.00);
         List<TimeSlot> availableTimeSlots = List.of(
                 new TimeSlot(
-                        LocalDateTime.of(2025, 7, 18, 8,0),
-                        LocalDateTime.of(2025, 7, 18, 16,0)
+                        LocalDateTime.of(2025, 7, 18, 8, 0),
+                        LocalDateTime.of(2025, 7, 18, 16, 0)
                 )
         );
 
         //WHEN
         serviceRequest.prepareOffer(
-                BigDecimal.valueOf(150.00),
+                estimatedCost,
                 availableTimeSlots
         );
 
@@ -70,6 +73,159 @@ public class ServiceRequestTest {
         assertEquals(estimatedCost, serviceRequest.getOffer().getEstimatedCost());
         assertEquals(serviceRequest.getOffer().getAvailableTimeSlots(), availableTimeSlots);
 
+    }
+
+    @Test
+    void should_throwInvalidRequestStateException_when_prepareOfferCalled_wrongStatus() {
+        //GIVEN
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        serviceRequest.prepareOffer(null, new ArrayList<>());
+        assertEquals(ServiceRequestStatusEnum.OFFER_CREATED, serviceRequest.getStatus());
+
+        //THEN
+        assertThrows(InvalidRequestStateException.class, () -> serviceRequest.prepareOffer(null, new ArrayList<>()));
+    }
+
+    @Test
+    void should_changeStatus_when_rejectRequestCalled() {
+        //GIVEN
+        String note = "test_note_reject_reason";
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+
+        //WHEN
+        serviceRequest.rejectRequest(note);
+
+        //THEN
+        assertEquals(ServiceRequestStatusEnum.REJECTED, serviceRequest.getStatus());
+        assertEquals(note, serviceRequest.getNote());
+    }
+
+
+    @Test
+    void should_throwInvalidRequestStateException_when_rejectRequestCalled_wrongStatus() {
+        //GIVEN
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        serviceRequest.prepareOffer(null, new ArrayList<>());
+        assertEquals(ServiceRequestStatusEnum.OFFER_CREATED, serviceRequest.getStatus());
+
+        //THEN
+        assertThrows(InvalidRequestStateException.class, () -> serviceRequest.rejectRequest("note"));
+    }
+
+    @Test
+    void should_changeStatusAndChosenTimeSlotNotEmpty_when_acceptOfferCalled() {
+        //GIVEN
+        TimeSlot chosenTimeSlot = new TimeSlot(
+                LocalDateTime.of(2025, 7, 18, 8, 0),
+                LocalDateTime.of(2025, 7, 18, 16, 0)
+        );
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        serviceRequest.prepareOffer(
+                BigDecimal.valueOf(150.00),
+                List.of(
+                        new TimeSlot(
+                                LocalDateTime.of(2025, 7, 18, 8, 0),
+                                LocalDateTime.of(2025, 7, 18, 16, 0)
+                        )
+                )
+        );
+
+        //WHEN
+        serviceRequest.acceptOffer(chosenTimeSlot);
+
+        //THEN
+        assertEquals(ServiceRequestStatusEnum.OFFER_ACCEPTED, serviceRequest.getStatus());
+        assertEquals(chosenTimeSlot, serviceRequest.getChosenTimeSlot());
+    }
+
+    @Test
+    void should_throwInvalidRequestStateException_when_acceptOfferCalled_wrongStatus() {
+        //GIVEN
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        assertEquals(ServiceRequestStatusEnum.NEW, serviceRequest.getStatus());
+
+        //THEN
+        assertThrows(InvalidRequestStateException.class, () -> serviceRequest.acceptOffer(new TimeSlot(
+                LocalDateTime.of(2025, 7, 18, 8, 0),
+                LocalDateTime.of(2025, 7, 18, 16, 0)
+        )));
+    }
+
+    @Test
+    void should_throwInvalidRequestStateException_when_acceptOfferCalled_wrongTimeSlot() {
+        //GIVEN
+        TimeSlot chosenTimeSlot = new TimeSlot(
+                LocalDateTime.of(3000, 1, 1, 0, 0),
+                LocalDateTime.of(3000, 1, 1, 0, 0)
+        );
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        serviceRequest.prepareOffer(
+                BigDecimal.valueOf(150.00),
+                List.of(
+                        new TimeSlot(
+                                LocalDateTime.of(2025, 7, 18, 8, 0),
+                                LocalDateTime.of(2025, 7, 18, 16, 0)
+                        )
+                )
+        );
+
+        //THEN
+        assertThrows(TimeSlotMismatchException.class, () -> serviceRequest.acceptOffer(chosenTimeSlot));
+    }
+
+    @Test
+    void should_changeStatus_when_rejectOfferCalled() {
+        //GIVEN
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        serviceRequest.prepareOffer(null, new ArrayList<>());
+
+        //WHEN
+        serviceRequest.rejectOffer();
+
+        //THEN
+        assertEquals(ServiceRequestStatusEnum.OFFER_REJECTED, serviceRequest.getStatus());
+    }
+
+    @Test
+    void should_changeStatus_when_cancelCalled() {
+        //GIVEN
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        serviceRequest.prepareOffer(null, new ArrayList<>());
+
+        //WHEN
+        serviceRequest.cancel();
+
+        //THEN
+        assertEquals(ServiceRequestStatusEnum.CANCELED, serviceRequest.getStatus());
+    }
+
+    @Test
+    void should_changeStatusAndRevenueAndCostsNotEmpty_when_settleCalled() {
+        //GIVEN
+        ServiceRequest serviceRequest = prepareDefaultServiceRequest();
+        serviceRequest.prepareOffer(
+                BigDecimal.valueOf(150.00),
+                List.of(
+                        new TimeSlot(
+                                LocalDateTime.of(2025, 7, 18, 8, 0),
+                                LocalDateTime.of(2025, 7, 18, 16, 0)
+                        )
+                )
+        );
+        serviceRequest.acceptOffer(new TimeSlot(
+                LocalDateTime.of(2025, 7, 18, 8, 0),
+                LocalDateTime.of(2025, 7, 18, 16, 0)
+        ));
+        BigDecimal finalRevenue = BigDecimal.valueOf(400);
+        BigDecimal costsOfParts = BigDecimal.valueOf(30);
+
+        //WHEN
+        serviceRequest.settle(finalRevenue, costsOfParts);
+
+        //THEN
+        assertEquals(ServiceRequestStatusEnum.COMPLETED, serviceRequest.getStatus());
+        assertEquals(finalRevenue, serviceRequest.getRevenue());
+        assertEquals(costsOfParts, serviceRequest.getCostOfParts());
     }
 
     private ServiceRequest prepareDefaultServiceRequest() {
