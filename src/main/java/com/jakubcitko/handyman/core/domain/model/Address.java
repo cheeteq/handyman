@@ -1,9 +1,40 @@
 package com.jakubcitko.handyman.core.domain.model;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class Address {
-    private String street;
-    private String streetNumber;
-    private String flatNumber;
-    private String city;
-    private String postalCode;
+
+    private final UUID id;
+    private final String street;
+    private final String streetNumber;
+    private  String flatNumber;
+    private final String city;
+    private final String postalCode;
+
+    private Address(UUID id, String street, String streetNumber, String flatNumber, String city, String postalCode) {
+        Objects.requireNonNull(id, "Address ID cannot be null");
+        Objects.requireNonNull(street, "Street cannot be null");
+        Objects.requireNonNull(city, "City cannot be null");
+        Objects.requireNonNull(postalCode, "Postal code cannot be null");
+
+        this.id = id;
+        this.street = street;
+        this.streetNumber = streetNumber;
+        this.flatNumber = flatNumber;
+        this.city = city;
+        this.postalCode = postalCode;
+    }
+
+    public static Address createNew(String street, String streetNumber, String flatNumber, String city, String postalCode) {
+        return new Address(
+                UUID.randomUUID(),
+                street,
+                streetNumber,
+                flatNumber,
+                city,
+                postalCode
+        );
+    }
+
 }

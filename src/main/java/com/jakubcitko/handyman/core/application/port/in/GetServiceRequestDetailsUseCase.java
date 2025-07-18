@@ -19,6 +19,7 @@ public interface GetServiceRequestDetailsUseCase {
             String title,
             String description,
             String status,
+            CustomerDetails customer,
             AddressDetails address,
             OfferDetails offer,
             List<FileReferenceDetails> attachments,
@@ -27,11 +28,13 @@ public interface GetServiceRequestDetailsUseCase {
     ) {
     }
 
-    record AddressDetails(String street, String city, String postalCode) {
+    record CustomerDetails(UUID customerId, String name, String phone) {
     }
 
-    record OfferDetails(BigDecimal estimatedCost, List<TimeSlotDetails> availableTimeSlots,
-                        TimeSlotDetails chosenTimeSlot) {
+    record AddressDetails(String street, String streetNumber, String flatNumber, String city, String postalCode) {
+    }
+
+    record OfferDetails(BigDecimal estimatedCost, List<TimeSlotDetails> availableTimeSlots, TimeSlotDetails chosenTimeSlot) {
     }
 
     record TimeSlotDetails(LocalDateTime start, LocalDateTime end) {

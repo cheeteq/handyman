@@ -11,4 +11,11 @@ public class Offer {
         this.estimatedCost = estimatedCost;
         this.availableTimeSlots = availableTimeSlots;
     }
+    public BigDecimal getEstimatedCost() {
+        return estimatedCost;
+    }
+
+    public List<TimeSlot> getAvailableTimeSlots() {
+        return availableTimeSlots;
+    }
 }

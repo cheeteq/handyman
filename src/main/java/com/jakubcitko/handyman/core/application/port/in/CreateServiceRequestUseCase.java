@@ -9,26 +9,9 @@ public interface CreateServiceRequestUseCase {
     record CreateServiceRequestCommand(
             String title,
             String description,
-            String customerName,
-            String customerPhone,
-            String customerEmail,
-            AddressData address,
-            List<FileReferenceInput> attachments
-    ) {
-    }
-
-    record AddressData(
-            String street,
-            String streetNumber,
-            String flatNumber,
-            String city,
-            String postalCode
-    ) {
-    }
-
-    record FileReferenceInput(
-            UUID fileUid,
-            String originalFilename
+            UUID customerId,
+            UUID addressId,
+            List<UUID> attachments
     ) {
     }
 }
