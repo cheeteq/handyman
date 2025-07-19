@@ -14,7 +14,7 @@ public class ServiceRequest {
     private final UUID customerId;
     private final UUID addressId;
     private final List<UUID> attachments;
-    private ServiceRequestStatusEnum status;
+    private ServiceRequestStatus status;
     private Offer offer;
     private TimeSlot chosenTimeSlot;
     private BigDecimal revenue;
@@ -28,7 +28,7 @@ public class ServiceRequest {
         this.customerId = customerId;
         this.addressId = addressId;
         this.attachments = attachments;
-        this.status = ServiceRequestStatusEnum.NEW;
+        this.status = ServiceRequestStatus.NEW;
     }
 
     public static ServiceRequest createNew(String title, String description, UUID customerId, UUID addressId, List<UUID> attachments) {
@@ -36,23 +36,23 @@ public class ServiceRequest {
     }
 
     public void prepareOffer(BigDecimal estimatedCost, List<TimeSlot> availableTimeSlots) {
-        if (!status.equals(ServiceRequestStatusEnum.NEW))
+        if (!status.equals(ServiceRequestStatus.NEW))
             throw new InvalidRequestStateException("Cannot prepare an offer, invalid status: " + status + ". Expected: NEW.");
 
         this.offer = new Offer(estimatedCost, availableTimeSlots);
-        this.status = ServiceRequestStatusEnum.OFFER_CREATED;
+        this.status = ServiceRequestStatus.OFFER_CREATED;
     }
 
     public void rejectRequest(String note) {
-        if (!status.equals(ServiceRequestStatusEnum.NEW))
+        if (!status.equals(ServiceRequestStatus.NEW))
             throw new InvalidRequestStateException("Cannot reject a request, invalid status: " + status + ". Expected: NEW.");
 
         this.note = note;
-        this.status = ServiceRequestStatusEnum.REJECTED;
+        this.status = ServiceRequestStatus.REJECTED;
     }
 
     public void acceptOffer(TimeSlot chosenTimeSlot) {
-        if (!status.equals(ServiceRequestStatusEnum.OFFER_CREATED))
+        if (!status.equals(ServiceRequestStatus.OFFER_CREATED))
             throw new InvalidRequestStateException("Cannot accept an offer, invalid status: " + status + ". Expected: OFFER_CREATED.");
 
         if (this.offer == null)
@@ -63,27 +63,27 @@ public class ServiceRequest {
             throw new TimeSlotMismatchException("The chosen time slot is not one of the available options.");
 
         this.chosenTimeSlot = chosenTimeSlot;
-        this.status = ServiceRequestStatusEnum.OFFER_ACCEPTED;
+        this.status = ServiceRequestStatus.OFFER_ACCEPTED;
     }
 
     public void rejectOffer() {
-        if (!status.equals(ServiceRequestStatusEnum.OFFER_CREATED))
+        if (!status.equals(ServiceRequestStatus.OFFER_CREATED))
             throw new IllegalStateException();
 
-        this.status = ServiceRequestStatusEnum.OFFER_REJECTED;
+        this.status = ServiceRequestStatus.OFFER_REJECTED;
     }
 
     public void cancel() {
-        this.status = ServiceRequestStatusEnum.CANCELED;
+        this.status = ServiceRequestStatus.CANCELED;
     }
 
     public void settle(BigDecimal finalRevenue, BigDecimal costsOfParts) {
-        if (status != ServiceRequestStatusEnum.OFFER_ACCEPTED) {
+        if (status != ServiceRequestStatus.OFFER_ACCEPTED) {
             throw new InvalidRequestStateException("Cannot settle a request. Invalid status: " + status + ". Expected: OFFER_ACCEPTED.");
         }
         this.revenue = finalRevenue;
         this.costOfParts = costsOfParts;
-        this.status = ServiceRequestStatusEnum.COMPLETED;
+        this.status = ServiceRequestStatus.COMPLETED;
     }
 
     public UUID getId() {
@@ -110,7 +110,7 @@ public class ServiceRequest {
         return attachments;
     }
 
-    public ServiceRequestStatusEnum getStatus() {
+    public ServiceRequestStatus getStatus() {
         return status;
     }
 

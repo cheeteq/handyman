@@ -3,7 +3,7 @@ package com.jakubcitko.handyman.core.application.domain.model;
 import com.jakubcitko.handyman.core.domain.exception.InvalidRequestStateException;
 import com.jakubcitko.handyman.core.domain.exception.TimeSlotMismatchException;
 import com.jakubcitko.handyman.core.domain.model.ServiceRequest;
-import com.jakubcitko.handyman.core.domain.model.ServiceRequestStatusEnum;
+import com.jakubcitko.handyman.core.domain.model.ServiceRequestStatus;
 import com.jakubcitko.handyman.core.domain.model.TimeSlot;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +45,7 @@ public class ServiceRequestTest {
         assertEquals(customerId, createdRequest.getCustomerId());
         assertEquals(addressId, createdRequest.getAddressId());
         assertEquals(attachments, createdRequest.getAttachments());
-        assertEquals(ServiceRequestStatusEnum.NEW, createdRequest.getStatus());
+        assertEquals(ServiceRequestStatus.NEW, createdRequest.getStatus());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class ServiceRequestTest {
 
 
         //THEN
-        assertEquals(ServiceRequestStatusEnum.OFFER_CREATED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.OFFER_CREATED, serviceRequest.getStatus());
         assertNotNull(serviceRequest.getOffer());
         assertEquals(estimatedCost, serviceRequest.getOffer().getEstimatedCost());
         assertEquals(serviceRequest.getOffer().getAvailableTimeSlots(), availableTimeSlots);
@@ -80,7 +80,7 @@ public class ServiceRequestTest {
         //GIVEN
         ServiceRequest serviceRequest = prepareDefaultServiceRequest();
         serviceRequest.prepareOffer(null, new ArrayList<>());
-        assertEquals(ServiceRequestStatusEnum.OFFER_CREATED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.OFFER_CREATED, serviceRequest.getStatus());
 
         //THEN
         assertThrows(InvalidRequestStateException.class, () -> serviceRequest.prepareOffer(null, new ArrayList<>()));
@@ -96,7 +96,7 @@ public class ServiceRequestTest {
         serviceRequest.rejectRequest(note);
 
         //THEN
-        assertEquals(ServiceRequestStatusEnum.REJECTED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.REJECTED, serviceRequest.getStatus());
         assertEquals(note, serviceRequest.getNote());
     }
 
@@ -106,7 +106,7 @@ public class ServiceRequestTest {
         //GIVEN
         ServiceRequest serviceRequest = prepareDefaultServiceRequest();
         serviceRequest.prepareOffer(null, new ArrayList<>());
-        assertEquals(ServiceRequestStatusEnum.OFFER_CREATED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.OFFER_CREATED, serviceRequest.getStatus());
 
         //THEN
         assertThrows(InvalidRequestStateException.class, () -> serviceRequest.rejectRequest("note"));
@@ -134,7 +134,7 @@ public class ServiceRequestTest {
         serviceRequest.acceptOffer(chosenTimeSlot);
 
         //THEN
-        assertEquals(ServiceRequestStatusEnum.OFFER_ACCEPTED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.OFFER_ACCEPTED, serviceRequest.getStatus());
         assertEquals(chosenTimeSlot, serviceRequest.getChosenTimeSlot());
     }
 
@@ -142,7 +142,7 @@ public class ServiceRequestTest {
     void should_throwInvalidRequestStateException_when_acceptOfferCalled_wrongStatus() {
         //GIVEN
         ServiceRequest serviceRequest = prepareDefaultServiceRequest();
-        assertEquals(ServiceRequestStatusEnum.NEW, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.NEW, serviceRequest.getStatus());
 
         //THEN
         assertThrows(InvalidRequestStateException.class, () -> serviceRequest.acceptOffer(new TimeSlot(
@@ -183,7 +183,7 @@ public class ServiceRequestTest {
         serviceRequest.rejectOffer();
 
         //THEN
-        assertEquals(ServiceRequestStatusEnum.OFFER_REJECTED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.OFFER_REJECTED, serviceRequest.getStatus());
     }
 
     @Test
@@ -196,7 +196,7 @@ public class ServiceRequestTest {
         serviceRequest.cancel();
 
         //THEN
-        assertEquals(ServiceRequestStatusEnum.CANCELED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.CANCELED, serviceRequest.getStatus());
     }
 
     @Test
@@ -223,7 +223,7 @@ public class ServiceRequestTest {
         serviceRequest.settle(finalRevenue, costsOfParts);
 
         //THEN
-        assertEquals(ServiceRequestStatusEnum.COMPLETED, serviceRequest.getStatus());
+        assertEquals(ServiceRequestStatus.COMPLETED, serviceRequest.getStatus());
         assertEquals(finalRevenue, serviceRequest.getRevenue());
         assertEquals(costsOfParts, serviceRequest.getCostOfParts());
     }

@@ -1,6 +1,6 @@
 package com.jakubcitko.handyman.adapters.outband.persistance.entity;
 
-import com.jakubcitko.handyman.core.domain.model.ServiceRequestStatusEnum;
+import com.jakubcitko.handyman.core.domain.model.ServiceRequestStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +47,7 @@ public class ServiceRequestEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ServiceRequestStatusEnum status;
+    private ServiceRequestStatus status;
 
     @Column(name = "final_revenue")
     private BigDecimal revenue;
