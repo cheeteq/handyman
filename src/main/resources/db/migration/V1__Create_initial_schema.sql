@@ -1,10 +1,30 @@
-CREATE TABLE customers
+CREATE TABLE users
 (
     id            UUID PRIMARY KEY,
-    name          VARCHAR(255) NOT NULL,
-    phone_number  VARCHAR(50),
-    email_address VARCHAR(255) NOT NULL UNIQUE,
-    version       BIGINT       NOT NULL DEFAULT 0
+    email         VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255),
+    version      BIGINT       NOT NULL DEFAULT 0
+);
+
+CREATE TABLE user_roles
+(
+    user_id UUID        NOT NULL,
+    role    VARCHAR(50) NOT NULL,
+    CONSTRAINT pk_user_roles PRIMARY KEY (user_id, role),
+    CONSTRAINT fk_user_roles_to_users
+        FOREIGN KEY (user_id)
+            REFERENCES users (id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE customers
+(
+    user_id      UUID PRIMARY KEY,
+    display_name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(50),
+    version      BIGINT       NOT NULL DEFAULT 0,
+    CONSTRAINT fk_customer_to_user
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE addresses
@@ -18,8 +38,9 @@ CREATE TABLE addresses
     postal_code   VARCHAR(20)  NOT NULL,
     CONSTRAINT fk_customer
         FOREIGN KEY (customer_id)
-            REFERENCES customers (id)
+            REFERENCES customers (user_id)
             ON DELETE CASCADE
+
 );
 
 CREATE TABLE service_requests
@@ -39,7 +60,7 @@ CREATE TABLE service_requests
     version              BIGINT       NOT NULL DEFAULT 0,
     CONSTRAINT fk_sr_customer
         FOREIGN KEY (customer_id)
-            REFERENCES customers (id),
+            REFERENCES customers (user_id),
     CONSTRAINT fk_sr_address
         FOREIGN KEY (address_id)
             REFERENCES addresses (id)

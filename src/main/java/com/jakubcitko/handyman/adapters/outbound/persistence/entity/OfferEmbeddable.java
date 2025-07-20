@@ -1,10 +1,15 @@
-package com.jakubcitko.handyman.adapters.outband.persistance.entity;
+package com.jakubcitko.handyman.adapters.outbound.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 @Embeddable
+@Getter
+@Setter
 public class OfferEmbeddable {
 
     @Column(name = "offer_estimated_cost")

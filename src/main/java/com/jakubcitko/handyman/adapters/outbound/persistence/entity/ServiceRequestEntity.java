@@ -1,4 +1,4 @@
-package com.jakubcitko.handyman.adapters.outband.persistance.entity;
+package com.jakubcitko.handyman.adapters.outbound.persistence.entity;
 
 import com.jakubcitko.handyman.core.domain.model.ServiceRequestStatus;
 import jakarta.persistence.*;

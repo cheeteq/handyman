@@ -21,7 +21,7 @@ public class ServiceRequest {
     private BigDecimal costOfParts;
     private String note;
 
-    private ServiceRequest(UUID id, String title, String description, UUID customerId, UUID addressId, List<UUID> attachments) {
+    public ServiceRequest(UUID id, String title, String description, UUID customerId, UUID addressId, List<UUID> attachments) {
         this.id = id;
         this.title = title;
         this.description = description;

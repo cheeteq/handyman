@@ -12,7 +12,7 @@ public class Address {
     private final String city;
     private final String postalCode;
 
-    private Address(UUID id, String street, String streetNumber, String flatNumber, String city, String postalCode) {
+    public Address(UUID id, String street, String streetNumber, String flatNumber, String city, String postalCode) {
         Objects.requireNonNull(id, "Address ID cannot be null");
         Objects.requireNonNull(street, "Street cannot be null");
         Objects.requireNonNull(city, "City cannot be null");

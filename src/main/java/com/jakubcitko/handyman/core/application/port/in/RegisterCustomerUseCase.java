@@ -7,10 +7,10 @@ public interface RegisterCustomerUseCase {
     void registerCustomer(RegisterCustomerCommand command);
 
     record RegisterCustomerCommand(
-            String firstName,
-            String lastName,
+            String displayName,
+            String phoneNumber,
             String email,
-            String phoneNumber
+            String password
     ) {
     }
 }

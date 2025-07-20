@@ -1,4 +1,4 @@
-package com.jakubcitko.handyman.adapters.outband.persistance.entity;
+package com.jakubcitko.handyman.adapters.outbound.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,17 +19,14 @@ import java.util.UUID;
 public class CustomerEntity {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "user_id")
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
 
     @Column(name = "phone_number")
-    private String phone;
-
-    @Column(name = "email_address", nullable = false, unique = true)
-    private String email;
+    private String phoneNumber;
 
     @OneToMany(
             cascade = CascadeType.ALL,

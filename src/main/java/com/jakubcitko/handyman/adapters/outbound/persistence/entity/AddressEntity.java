@@ -1,4 +1,4 @@
-package com.jakubcitko.handyman.adapters.outband.persistance.entity;
+package com.jakubcitko.handyman.adapters.outbound.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,10 +6,6 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-/**
- * Encja JPA reprezentująca adres.
- * Jest to encja podrzędna w agregacie Customer.
- */
 @Entity
 @Table(name = "addresses")
 @Getter
