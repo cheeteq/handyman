@@ -34,7 +34,7 @@ public class CustomerService implements RegisterCustomerUseCase, AddAddressToCus
     @Override
     public void addAddressToCustomer(AddAddressToCustomerCommand command) {
         Customer customer = customerRepository.findById(command.customerId())
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id: %s not found", command.customerId()));
 
         customer.addAddress(Address.createNew(
                 command.street(),
