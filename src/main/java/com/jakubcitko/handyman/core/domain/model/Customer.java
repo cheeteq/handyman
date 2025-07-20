@@ -3,6 +3,7 @@ package com.jakubcitko.handyman.core.domain.model;
 import com.jakubcitko.handyman.core.domain.exception.AddressAlreadyExistsException;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 @Getter
@@ -23,6 +24,7 @@ public class Customer {
         this.id = id;
         this.displayName = displayName;
         this.phoneNumber = phoneNumber;
+        this.addresses = new ArrayList<>();
     }
 
     public static Customer registerNew(UUID userId, String displayName, String phone) {

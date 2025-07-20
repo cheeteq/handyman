@@ -5,7 +5,7 @@ import com.jakubcitko.handyman.core.domain.model.ServiceRequest;
 import org.mapstruct.Mapper;
 
 
-@Mapper(componentModel = "spring", uses = { CommonPersistenceMapper.class } )
+@Mapper(componentModel = "spring", uses = { CommonPersistenceMapper.class })
 public interface ServiceRequestPersistenceMapper {
     ServiceRequestEntity toEntity(ServiceRequest domainObject);
 

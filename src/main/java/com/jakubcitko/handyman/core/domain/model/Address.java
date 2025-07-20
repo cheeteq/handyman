@@ -1,8 +1,10 @@
 package com.jakubcitko.handyman.core.domain.model;
 
+import lombok.Getter;
+
 import java.util.Objects;
 import java.util.UUID;
-
+@Getter
 public class Address {
 
     private final UUID id;

@@ -7,11 +7,17 @@ public interface AddAddressToCustomerUseCase {
 
     record AddAddressToCustomerCommand(
             UUID customerId,
+            AddressData addressData
+    ) {
+    }
+
+    record AddressData(
             String street,
             String streetNumber,
             String flatNumber,
             String city,
             String postalCode
     ) {
+
     }
 }

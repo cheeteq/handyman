@@ -1,6 +1,7 @@
 package com.jakubcitko.handyman.adapters.outbound.persistence;
 
 import com.jakubcitko.handyman.core.application.port.out.CustomerRepositoryPort;
+import com.jakubcitko.handyman.core.domain.model.Address;
 import com.jakubcitko.handyman.core.domain.model.Customer;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,17 @@ public class CustomerMockRepository implements CustomerRepositoryPort {
     }
 
     @Override
+    public void update(Customer customer) {
+        customers.put(customer.getId(), customer);
+    }
+
+    @Override
     public Optional<Customer> findById(UUID id) {
         return Optional.ofNullable(customers.get(id));
+    }
+
+    @Override
+    public List<Address> findAddressesByCustomerId(UUID customerId) {
+        return customers.get(customerId).getAddresses();
     }
 }

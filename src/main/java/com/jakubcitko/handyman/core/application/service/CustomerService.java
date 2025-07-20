@@ -1,6 +1,8 @@
 package com.jakubcitko.handyman.core.application.service;
 
+import com.jakubcitko.handyman.adapters.inbound.web.dto.AddressResponseDto;
 import com.jakubcitko.handyman.core.application.port.in.AddAddressToCustomerUseCase;
+import com.jakubcitko.handyman.core.application.port.in.GetCustomerAddressesUseCase;
 import com.jakubcitko.handyman.core.application.port.in.RegisterCustomerUseCase;
 import com.jakubcitko.handyman.core.application.port.out.CustomerRepositoryPort;
 import com.jakubcitko.handyman.core.application.port.out.UserRepositoryPort;
@@ -14,11 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
 @Transactional
-public class CustomerService implements RegisterCustomerUseCase, AddAddressToCustomerUseCase {
+public class CustomerService implements RegisterCustomerUseCase, AddAddressToCustomerUseCase, GetCustomerAddressesUseCase {
 
     private final CustomerRepositoryPort customerRepository;
     private final UserRepositoryPort userRepository;
@@ -59,13 +62,32 @@ public class CustomerService implements RegisterCustomerUseCase, AddAddressToCus
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with id: %s not found", command.customerId()));
 
         customer.addAddress(Address.createNew(
-                command.street(),
-                command.streetNumber(),
-                command.flatNumber(),
-                command.city(),
-                command.postalCode()
+                command.addressData().street(),
+                command.addressData().streetNumber(),
+                command.addressData().flatNumber(),
+                command.addressData().city(),
+                command.addressData().postalCode()
         ));
 
-        customerRepository.save(customer);
+        customerRepository.update(customer);
+    }
+
+    @Override
+    public List<AddressResponseDto> getAddressesForCustomer(GetCustomerAddressesQuery query) {
+        List<Address> addresses = customerRepository.findAddressesByCustomerId(query.customerId());
+        return addresses.stream()
+                .map(this::mapAddressToDto)
+                .toList();
+    }
+
+    private AddressResponseDto mapAddressToDto(Address address) {
+        return new AddressResponseDto(
+                address.getId(),
+                address.getStreet(),
+                address.getStreetNumber(),
+                address.getFlatNumber(),
+                address.getCity(),
+                address.getPostalCode()
+        );
     }
 }
