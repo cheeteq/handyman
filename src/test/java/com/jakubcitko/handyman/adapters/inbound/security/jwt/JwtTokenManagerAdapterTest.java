@@ -49,7 +49,7 @@ class JwtTokenManagerAdapterTest {
     void should_invalidateTamperedToken() {
         // GIVEN
         String tamperedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" +
-                "tampered"; // Dopisujemy coś do podpisu
+                "tampered"; // adding some text
 
         // WHEN & THEN
         assertFalse(tokenManager.isTokenValid(tamperedToken));

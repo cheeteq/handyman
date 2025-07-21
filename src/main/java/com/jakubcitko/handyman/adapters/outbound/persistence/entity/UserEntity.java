@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -16,7 +17,7 @@ public class UserEntity {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "email",nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password_hash")

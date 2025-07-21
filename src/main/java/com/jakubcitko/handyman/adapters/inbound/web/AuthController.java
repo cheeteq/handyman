@@ -47,32 +47,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequestDto loginRequest) {
-        // 1. Uwierzytelnij użytkownika.
-        // Jeśli dane są błędne, ten krok rzuci wyjątek, który zostanie obsłużony globalnie.
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
         );
-
-        // 2. Ustaw uwierzytelnienie w kontekście bezpieczeństwa.
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-        // 3. Pobierz email z obiektu uwierzytelnienia.
         String email = authentication.getName();
 
-        // 4. Użyj naszego portu, aby pobrać CZYSTY obiekt domenowy UserAccount.
-        // W tym momencie mamy pewność, że użytkownik istnieje, bo logowanie się udało.
         UserAccount userAccount = loadUserAccountPort.loadUserByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Authenticated user not found in database: " + email));
 
-        // 5. Wygeneruj token JWT, używając danych z obiektu domenowego.
         String jwt = tokenManager.generateToken(
                 userAccount.id(),
                 userAccount.email(),
                 userAccount.roles()
         );
 
-        // 6. Zbuduj i zwróć odpowiedź.
         List<String> roleNames = userAccount.roles().stream().map(Role::name).collect(Collectors.toList());
         return ResponseEntity.ok(new JwtResponseDto(jwt, userAccount.id(), userAccount.email(), roleNames));
     }

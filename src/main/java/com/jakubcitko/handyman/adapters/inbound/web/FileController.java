@@ -20,7 +20,7 @@ public class FileController {
     }
 
     @PostMapping("/generate-upload-url")
-    @PreAuthorize("isAuthenticated()") // Każdy zalogowany użytkownik może generować URL
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GenerateUploadUrlUseCase.UploadUrlResponse> generateUploadUrl(@RequestBody GenerateUploadUrlRequestDto requestDto) {
 
         var command = new GenerateUploadUrlUseCase.GenerateUploadUrlCommand(

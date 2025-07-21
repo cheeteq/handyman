@@ -6,10 +6,12 @@ import java.util.Objects;
 public class TimeSlot {
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
+
     public TimeSlot(LocalDateTime startDate, LocalDateTime endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

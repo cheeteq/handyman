@@ -6,11 +6,12 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 @Getter
 public class Customer {
     private final UUID id;
     private final String displayName;
-    private  String phoneNumber;
+    private String phoneNumber;
     private List<Address> addresses;
 
     public void addAddress(Address newAddress) {

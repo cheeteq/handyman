@@ -30,10 +30,6 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    /**
-     * Główny bean konfigurujący łańcuch filtrów bezpieczeństwa.
-     * Zależności (jak AuthTokenFilter) są wstrzykiwane jako parametry metody.
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
 

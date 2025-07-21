@@ -9,7 +9,10 @@ import java.util.UUID;
 
 public interface CustomerRepositoryPort {
     void save(Customer customer);
+
     void update(Customer customer);
+
     Optional<Customer> findById(UUID id);
+
     List<Address> findAddressesByCustomerId(UUID customerId);
 }
