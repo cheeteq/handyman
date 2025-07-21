@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers") // Zasobem, którym zarządzamy, jest 'customer'
+@RequestMapping("/api/customers")
 public class CustomerController {
 
     private final AddAddressToCustomerUseCase addAddressUseCase;

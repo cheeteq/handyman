@@ -1,5 +1,6 @@
 package com.jakubcitko.handyman.adapters.inbound.security;
 
+import com.jakubcitko.handyman.AbstractSpringBootTest;
 import com.jakubcitko.handyman.core.application.port.out.TokenManagerPort;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -15,6 +17,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -26,10 +30,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@ActiveProfiles("test")
-class AuthTokenFilterTest {
-
+class AuthTokenFilterTest extends AbstractSpringBootTest {
     @Autowired
     private AuthTokenFilter authTokenFilter;
     @Autowired
