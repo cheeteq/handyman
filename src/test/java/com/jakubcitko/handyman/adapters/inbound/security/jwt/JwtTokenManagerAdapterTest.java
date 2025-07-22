@@ -1,26 +1,18 @@
 package com.jakubcitko.handyman.adapters.inbound.security.jwt;
 
+import com.jakubcitko.handyman.AbstractSpringBootTest;
 import com.jakubcitko.handyman.core.domain.model.Role;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JwtTokenManagerAdapterTest {
-
-    private JwtTokenManagerAdapter tokenManager;
-
-    @BeforeEach
-    void setUp() {
-        tokenManager = new JwtTokenManagerAdapter();
-        ReflectionTestUtils.setField(tokenManager, "jwtSecret", "aVeryLongAndSecureSecretKeyForTestsThatIsAtLeast512BitsLong");
-        ReflectionTestUtils.setField(tokenManager, "jwtExpirationMs", 3600000); // 1 godzina
-    }
-
+class JwtTokenManagerAdapterTest extends AbstractSpringBootTest {
+    @Autowired
+    JwtTokenManagerAdapter tokenManager;
     @Test
     void should_generateValidToken_and_retrieveEmailFromIt() {
         // GIVEN
