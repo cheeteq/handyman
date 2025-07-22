@@ -1,6 +1,5 @@
-package com.jakubcitko.handyman.core.application.service.security;
+package com.jakubcitko.handyman.adapters.inbound.security;
 
-import com.jakubcitko.handyman.adapters.inbound.security.UserDetailsServiceImpl;
 import com.jakubcitko.handyman.core.application.port.out.LoadUserAccountPort;
 import com.jakubcitko.handyman.core.domain.model.Role;
 import com.jakubcitko.handyman.core.domain.model.UserAccount;

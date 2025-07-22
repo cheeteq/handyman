@@ -36,21 +36,21 @@ services:
       timeout: 20s
       retries: 3
 
-  handyman-app:
-    build: .
-    container_name: handyman_app
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/handyman_db
-      - SPRING_DATASOURCE_USERNAME=handyman_user
-      - SPRING_DATASOURCE_PASSWORD=Haslo123!
-      - MINIO_ENDPOINT=http://minio:9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=minioadmin
-      - MINIO_BUCKET_NAME=attachments
-    depends_on:
-      postgres-db:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
+#  handyman-app:
+#    build: .
+#    container_name: handyman_app
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/handyman_db
+#      - SPRING_DATASOURCE_USERNAME=handyman_user
+#      - SPRING_DATASOURCE_PASSWORD=Haslo123!
+#      - MINIO_ENDPOINT=http://minio:9000
+#      - MINIO_ACCESS_KEY=minioadmin
+#      - MINIO_SECRET_KEY=minioadmin
+#      - MINIO_BUCKET_NAME=attachments
+#    depends_on:
+#      postgres-db:
+#        condition: service_healthy
+#      minio:
+#        condition: service_healthy

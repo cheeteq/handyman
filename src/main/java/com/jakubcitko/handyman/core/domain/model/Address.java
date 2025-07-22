@@ -11,7 +11,7 @@ public class Address {
     private final UUID id;
     private final String street;
     private final String streetNumber;
-    private String flatNumber;
+    private final String flatNumber;
     private final String city;
     private final String postalCode;
 

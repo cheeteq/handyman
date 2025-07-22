@@ -1,10 +1,7 @@
-package com.jakubcitko.handyman.core.application.domain.model;
+package com.jakubcitko.handyman.core.domain.model;
 
 import com.jakubcitko.handyman.core.domain.exception.InvalidRequestStateException;
 import com.jakubcitko.handyman.core.domain.exception.TimeSlotMismatchException;
-import com.jakubcitko.handyman.core.domain.model.ServiceRequest;
-import com.jakubcitko.handyman.core.domain.model.ServiceRequestStatus;
-import com.jakubcitko.handyman.core.domain.model.TimeSlot;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
