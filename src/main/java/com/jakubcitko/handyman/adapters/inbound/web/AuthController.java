@@ -1,6 +1,7 @@
 package com.jakubcitko.handyman.adapters.inbound.web;
 
 
+import com.jakubcitko.handyman.adapters.inbound.security.AuthService;
 import com.jakubcitko.handyman.adapters.inbound.web.dto.JwtResponseDto;
 import com.jakubcitko.handyman.adapters.inbound.web.dto.LoginRequestDto;
 import com.jakubcitko.handyman.adapters.inbound.web.dto.RegisterRequestDto;
@@ -30,31 +31,24 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenManagerPort tokenManager;
     private final RegisterCustomerUseCase registerCustomerUseCase;
-    private final LoadUserAccountPort loadUserAccountPort;
+    private final AuthService authService;
 
     @Autowired
     public AuthController(
             AuthenticationManager authenticationManager,
             TokenManagerPort tokenManager,
             RegisterCustomerUseCase registerCustomerUseCase,
-            LoadUserAccountPort loadUserAccountPort
+            AuthService authService
     ) {
         this.authenticationManager = authenticationManager;
         this.tokenManager = tokenManager;
         this.registerCustomerUseCase = registerCustomerUseCase;
-        this.loadUserAccountPort = loadUserAccountPort;
+        this.authService = authService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequestDto loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String email = authentication.getName();
-
-        UserAccount userAccount = loadUserAccountPort.loadUserByEmail(email)
-                .orElseThrow(() -> new IllegalStateException("Authenticated user not found in database: " + email));
+        UserAccount userAccount = authService.getLoggedUserAccount();
 
         String jwt = tokenManager.generateToken(
                 userAccount.id(),

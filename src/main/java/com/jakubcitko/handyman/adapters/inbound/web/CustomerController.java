@@ -36,7 +36,7 @@ public class CustomerController {
                 addressDto.postalCode()
         );
         var command = new AddAddressToCustomerUseCase.AddAddressToCustomerCommand(
-                authService.getLoggedUserId(),
+                authService.getLoggedUserAccount().id(),
                 addressData
         );
         addAddressUseCase.addAddressToCustomer(command);
@@ -46,7 +46,7 @@ public class CustomerController {
     @GetMapping("/me/addresses")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<List<AddressResponseDto>> getMyAddresses() {
-        var query = new GetCustomerAddressesUseCase.GetCustomerAddressesQuery(authService.getLoggedUserId());
+        var query = new GetCustomerAddressesUseCase.GetCustomerAddressesQuery(authService.getLoggedUserAccount().id());
         return ResponseEntity.ok(getCustomerAddressesUseCase.getAddressesForCustomer(query));
     }
 

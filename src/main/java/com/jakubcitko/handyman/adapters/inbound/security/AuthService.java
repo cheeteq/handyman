@@ -16,11 +16,11 @@ public class AuthService {
         this.loadUserAccountPort = loadUserAccountPort;
     }
 
-    public UUID getLoggedUserId() {
+    public UserAccount getLoggedUserAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
-        UserAccount userAccount = loadUserAccountPort.loadUserByEmail(userEmail)
+
+        return loadUserAccountPort.loadUserByEmail(userEmail)
                 .orElseThrow(() -> new IllegalStateException("Authenticated user not found in database: " + userEmail));
-        return userAccount.id();
     }
 }
