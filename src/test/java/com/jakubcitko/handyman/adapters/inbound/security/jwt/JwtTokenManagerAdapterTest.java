@@ -26,15 +26,8 @@ class JwtTokenManagerAdapterTest extends AbstractSpringBootTest {
         // THEN
         assertNotNull(token);
         assertFalse(token.isBlank());
-
-        // Sprawdzamy, czy ten sam token jest walidowany jako poprawny
         assertTrue(tokenManager.isTokenValid(token));
-
-        // Sprawdzamy, czy możemy odczytać z niego poprawne dane
         assertEquals(email, tokenManager.getEmailFromToken(token));
-
-        // Można by też dodać test na odczyt ról, jeśli dodasz taką metodę
-        // assertEquals(roles, tokenManager.getRolesFromToken(token));
     }
 
     @Test
