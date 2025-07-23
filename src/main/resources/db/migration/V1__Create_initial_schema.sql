@@ -1,11 +1,11 @@
 CREATE TABLE users
 (
-    id            UUID PRIMARY KEY,
-    email         VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255),
-    creation_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    id                UUID PRIMARY KEY,
+    email             VARCHAR(255)             NOT NULL UNIQUE,
+    password_hash     VARCHAR(255),
+    creation_date     TIMESTAMP WITH TIME ZONE NOT NULL,
     modification_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    version      BIGINT       NOT NULL DEFAULT 0
+    version           BIGINT                   NOT NULL DEFAULT 0
 );
 
 CREATE TABLE user_roles
@@ -21,12 +21,12 @@ CREATE TABLE user_roles
 
 CREATE TABLE customers
 (
-    user_id      UUID PRIMARY KEY,
-    display_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(50),
-    creation_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    user_id           UUID PRIMARY KEY,
+    display_name      VARCHAR(255)             NOT NULL,
+    phone_number      VARCHAR(50),
+    creation_date     TIMESTAMP WITH TIME ZONE NOT NULL,
     modification_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    version      BIGINT       NOT NULL DEFAULT 0,
+    version           BIGINT                   NOT NULL DEFAULT 0,
     CONSTRAINT fk_customer_to_user
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
@@ -50,20 +50,20 @@ CREATE TABLE addresses
 CREATE TABLE service_requests
 (
     id                   UUID PRIMARY KEY,
-    customer_id          UUID         NOT NULL,
-    address_id           UUID         NOT NULL,
-    title                VARCHAR(255) NOT NULL,
+    customer_id          UUID                     NOT NULL,
+    address_id           UUID                     NOT NULL,
+    title                VARCHAR(255)             NOT NULL,
     description_text     TEXT,
-    status               VARCHAR(50)  NOT NULL,
+    status               VARCHAR(50)              NOT NULL,
     offer_estimated_cost DECIMAL(10, 2),
-    chosen_slot_start    TIMESTAMP,
-    chosen_slot_end      TIMESTAMP,
+    chosen_slot_start    TIMESTAMP WITH TIME ZONE,
+    chosen_slot_end      TIMESTAMP WITH TIME ZONE,
     final_revenue        DECIMAL(10, 2),
     costs_of_parts       DECIMAL(10, 2),
     internal_note        TEXT,
-    creation_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    modification_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    version              BIGINT       NOT NULL DEFAULT 0,
+    creation_date        TIMESTAMP WITH TIME ZONE NOT NULL,
+    modification_date    TIMESTAMP WITH TIME ZONE NOT NULL,
+    version              BIGINT                   NOT NULL DEFAULT 0,
     CONSTRAINT fk_sr_customer
         FOREIGN KEY (customer_id)
             REFERENCES customers (user_id),
@@ -74,9 +74,9 @@ CREATE TABLE service_requests
 
 CREATE TABLE offer_available_time_slots
 (
-    service_request_id UUID      NOT NULL,
-    start_date_time    TIMESTAMP NOT NULL,
-    end_date_time      TIMESTAMP NOT NULL,
+    service_request_id UUID                     NOT NULL,
+    start_date_time    TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_date_time      TIMESTAMP WITH TIME ZONE NOT NULL,
     CONSTRAINT fk_oats_service_request
         FOREIGN KEY (service_request_id)
             REFERENCES service_requests (id)

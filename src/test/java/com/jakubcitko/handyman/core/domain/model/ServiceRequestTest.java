@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServiceRequestTest {
+
+    private final ZoneOffset zoneOffset = ZoneOffset.UTC;
 
     @Test
     void should_createNewRequestServiceWithId_when_factoryMethodCalled() {
@@ -52,8 +55,8 @@ public class ServiceRequestTest {
         BigDecimal estimatedCost = BigDecimal.valueOf(150.00);
         List<TimeSlot> availableTimeSlots = List.of(
                 new TimeSlot(
-                        LocalDateTime.of(2025, 7, 18, 8, 0),
-                        LocalDateTime.of(2025, 7, 18, 16, 0)
+                        LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
+                        LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
                 )
         );
 
@@ -113,16 +116,16 @@ public class ServiceRequestTest {
     void should_changeStatusAndChosenTimeSlotNotEmpty_when_acceptOfferCalled() {
         //GIVEN
         TimeSlot chosenTimeSlot = new TimeSlot(
-                LocalDateTime.of(2025, 7, 18, 8, 0),
-                LocalDateTime.of(2025, 7, 18, 16, 0)
+                LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
+                LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
         );
         ServiceRequest serviceRequest = prepareDefaultServiceRequest();
         serviceRequest.prepareOffer(
                 BigDecimal.valueOf(150.00),
                 List.of(
                         new TimeSlot(
-                                LocalDateTime.of(2025, 7, 18, 8, 0),
-                                LocalDateTime.of(2025, 7, 18, 16, 0)
+                                LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
+                                LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
                         )
                 )
         );
@@ -143,8 +146,8 @@ public class ServiceRequestTest {
 
         //THEN
         assertThrows(InvalidRequestStateException.class, () -> serviceRequest.acceptOffer(new TimeSlot(
-                LocalDateTime.of(2025, 7, 18, 8, 0),
-                LocalDateTime.of(2025, 7, 18, 16, 0)
+                LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
+                LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
         )));
     }
 
@@ -152,16 +155,16 @@ public class ServiceRequestTest {
     void should_throwInvalidRequestStateException_when_acceptOfferCalled_wrongTimeSlot() {
         //GIVEN
         TimeSlot chosenTimeSlot = new TimeSlot(
-                LocalDateTime.of(3000, 1, 1, 0, 0),
-                LocalDateTime.of(3000, 1, 1, 0, 0)
+                LocalDateTime.of(3000, 1, 1, 0, 0).toInstant(zoneOffset),
+                LocalDateTime.of(3000, 1, 1, 0, 0).toInstant(zoneOffset)
         );
         ServiceRequest serviceRequest = prepareDefaultServiceRequest();
         serviceRequest.prepareOffer(
                 BigDecimal.valueOf(150.00),
                 List.of(
                         new TimeSlot(
-                                LocalDateTime.of(2025, 7, 18, 8, 0),
-                                LocalDateTime.of(2025, 7, 18, 16, 0)
+                                LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
+                                LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
                         )
                 )
         );
@@ -204,14 +207,14 @@ public class ServiceRequestTest {
                 BigDecimal.valueOf(150.00),
                 List.of(
                         new TimeSlot(
-                                LocalDateTime.of(2025, 7, 18, 8, 0),
-                                LocalDateTime.of(2025, 7, 18, 16, 0)
+                                LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
+                                LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
                         )
                 )
         );
         serviceRequest.acceptOffer(new TimeSlot(
-                LocalDateTime.of(2025, 7, 18, 8, 0),
-                LocalDateTime.of(2025, 7, 18, 16, 0)
+                LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
+                LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
         ));
         BigDecimal finalRevenue = BigDecimal.valueOf(400);
         BigDecimal costsOfParts = BigDecimal.valueOf(30);

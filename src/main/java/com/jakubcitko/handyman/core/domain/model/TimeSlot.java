@@ -1,13 +1,13 @@
 package com.jakubcitko.handyman.core.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 public class TimeSlot {
-    private final LocalDateTime startDate;
-    private final LocalDateTime endDate;
+    private final Instant startDate;
+    private final Instant endDate;
 
-    public TimeSlot(LocalDateTime startDate, LocalDateTime endDate) {
+    public TimeSlot(Instant startDate, Instant endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }
