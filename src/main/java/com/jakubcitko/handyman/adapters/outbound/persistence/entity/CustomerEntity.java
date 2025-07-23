@@ -16,7 +16,7 @@ import java.util.UUID;
 @Table(name = "customers")
 @Getter
 @Setter
-public class CustomerEntity {
+public class CustomerEntity extends AbstractAuditableEntity {
 
     @Id
     @Column(name = "user_id")

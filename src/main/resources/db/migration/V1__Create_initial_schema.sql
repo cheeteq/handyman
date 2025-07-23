@@ -3,6 +3,8 @@ CREATE TABLE users
     id            UUID PRIMARY KEY,
     email         VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255),
+    creation_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    modification_date TIMESTAMP WITH TIME ZONE NOT NULL,
     version      BIGINT       NOT NULL DEFAULT 0
 );
 
@@ -22,6 +24,8 @@ CREATE TABLE customers
     user_id      UUID PRIMARY KEY,
     display_name VARCHAR(255) NOT NULL,
     phone_number VARCHAR(50),
+    creation_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    modification_date TIMESTAMP WITH TIME ZONE NOT NULL,
     version      BIGINT       NOT NULL DEFAULT 0,
     CONSTRAINT fk_customer_to_user
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
@@ -57,6 +61,8 @@ CREATE TABLE service_requests
     final_revenue        DECIMAL(10, 2),
     costs_of_parts       DECIMAL(10, 2),
     internal_note        TEXT,
+    creation_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    modification_date TIMESTAMP WITH TIME ZONE NOT NULL,
     version              BIGINT       NOT NULL DEFAULT 0,
     CONSTRAINT fk_sr_customer
         FOREIGN KEY (customer_id)

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "service_requests")
 @Getter
 @Setter
-public class ServiceRequestEntity {
+public class ServiceRequestEntity extends AbstractAuditableEntity {
 
     @Id
     @Column(name = "id")

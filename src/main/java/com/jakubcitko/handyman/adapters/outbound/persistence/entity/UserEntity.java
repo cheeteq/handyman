@@ -11,7 +11,7 @@ import java.util.*;
 @Table(name = "users")
 @Getter
 @Setter
-public class UserEntity {
+public class UserEntity extends AbstractAuditableEntity {
 
     @Id
     @Column(name = "id")
