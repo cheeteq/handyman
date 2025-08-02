@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CreateServiceRequestUseCase {
-    void createServiceRequest(CreateServiceRequestCommand command);
+    UUID createServiceRequest(CreateServiceRequestCommand command);
 
     record CreateServiceRequestCommand(
             String title,

@@ -1,7 +1,6 @@
 package com.jakubcitko.handyman.adapters.outbound.persistence;
 
 import com.jakubcitko.handyman.adapters.outbound.persistence.entity.CustomerEntity;
-import com.jakubcitko.handyman.adapters.outbound.persistence.entity.UserEntity;
 import com.jakubcitko.handyman.adapters.outbound.persistence.mapper.CustomerPersistenceMapper;
 import com.jakubcitko.handyman.core.application.port.out.CustomerRepositoryPort;
 import com.jakubcitko.handyman.core.domain.model.Address;

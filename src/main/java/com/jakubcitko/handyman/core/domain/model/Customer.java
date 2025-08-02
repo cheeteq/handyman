@@ -1,6 +1,6 @@
 package com.jakubcitko.handyman.core.domain.model;
 
-import com.jakubcitko.handyman.core.domain.exception.AddressAlreadyExistsException;
+import com.jakubcitko.handyman.core.domain.exception.BusinessRuleViolationException;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class Customer {
 
     public void addAddress(Address newAddress) {
         if (this.addresses.contains(newAddress)) {
-            throw new AddressAlreadyExistsException("This address is already associated with the customer.");
+            throw new BusinessRuleViolationException("This address is already associated with the customer.");
         }
         this.addresses.add(newAddress);
     }

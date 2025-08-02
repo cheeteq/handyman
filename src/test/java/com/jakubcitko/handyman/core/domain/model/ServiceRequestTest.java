@@ -1,7 +1,6 @@
 package com.jakubcitko.handyman.core.domain.model;
 
-import com.jakubcitko.handyman.core.domain.exception.InvalidRequestStateException;
-import com.jakubcitko.handyman.core.domain.exception.TimeSlotMismatchException;
+import com.jakubcitko.handyman.core.domain.exception.BusinessRuleViolationException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -83,7 +82,7 @@ public class ServiceRequestTest {
         assertEquals(ServiceRequestStatus.OFFER_CREATED, serviceRequest.getStatus());
 
         //THEN
-        assertThrows(InvalidRequestStateException.class, () -> serviceRequest.prepareOffer(null, new ArrayList<>()));
+        assertThrows(BusinessRuleViolationException.class, () -> serviceRequest.prepareOffer(null, new ArrayList<>()));
     }
 
     @Test
@@ -109,7 +108,7 @@ public class ServiceRequestTest {
         assertEquals(ServiceRequestStatus.OFFER_CREATED, serviceRequest.getStatus());
 
         //THEN
-        assertThrows(InvalidRequestStateException.class, () -> serviceRequest.rejectRequest("note"));
+        assertThrows(BusinessRuleViolationException.class, () -> serviceRequest.rejectRequest("note"));
     }
 
     @Test
@@ -145,7 +144,7 @@ public class ServiceRequestTest {
         assertEquals(ServiceRequestStatus.NEW, serviceRequest.getStatus());
 
         //THEN
-        assertThrows(InvalidRequestStateException.class, () -> serviceRequest.acceptOffer(new TimeSlot(
+        assertThrows(BusinessRuleViolationException.class, () -> serviceRequest.acceptOffer(new TimeSlot(
                 LocalDateTime.of(2025, 7, 18, 8, 0).toInstant(zoneOffset),
                 LocalDateTime.of(2025, 7, 18, 16, 0).toInstant(zoneOffset)
         )));
@@ -170,7 +169,7 @@ public class ServiceRequestTest {
         );
 
         //THEN
-        assertThrows(TimeSlotMismatchException.class, () -> serviceRequest.acceptOffer(chosenTimeSlot));
+        assertThrows(BusinessRuleViolationException.class, () -> serviceRequest.acceptOffer(chosenTimeSlot));
     }
 
     @Test

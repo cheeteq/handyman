@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ServiceRequestRepositoryPort {
-    void save(ServiceRequest serviceRequest);
+    UUID save(ServiceRequest serviceRequest);
 
     Optional<ServiceRequest> findById(UUID id);
 }

@@ -6,8 +6,7 @@ import com.jakubcitko.handyman.core.application.port.in.GetCustomerAddressesUseC
 import com.jakubcitko.handyman.core.application.port.in.RegisterCustomerUseCase;
 import com.jakubcitko.handyman.core.application.port.out.CustomerRepositoryPort;
 import com.jakubcitko.handyman.core.application.port.out.UserRepositoryPort;
-import com.jakubcitko.handyman.core.domain.exception.CustomerNotFoundException;
-import com.jakubcitko.handyman.core.domain.exception.EmailAlreadyUsedException;
+import com.jakubcitko.handyman.core.domain.exception.BusinessRuleViolationException;
 import com.jakubcitko.handyman.core.domain.model.Address;
 import com.jakubcitko.handyman.core.domain.model.Customer;
 import com.jakubcitko.handyman.core.domain.model.User;
@@ -69,7 +68,7 @@ class CustomerServiceTest {
             when(userRepository.existsByEmail(command.email())).thenReturn(true);
 
             // WHEN & THEN
-            assertThrows(EmailAlreadyUsedException.class, () -> {
+            assertThrows(BusinessRuleViolationException.class, () -> {
                 customerService.registerCustomer(command);
             });
 
@@ -110,7 +109,7 @@ class CustomerServiceTest {
             when(customerRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
             // WHEN & THEN
-            assertThrows(CustomerNotFoundException.class, () -> {
+            assertThrows(BusinessRuleViolationException.class, () -> {
                 customerService.addAddressToCustomer(command);
             });
         }

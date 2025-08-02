@@ -1,9 +1,7 @@
 package com.jakubcitko.handyman.adapters.inbound.web;
 
 
-import com.jakubcitko.handyman.adapters.inbound.web.dto.JwtResponseDto;
-import com.jakubcitko.handyman.adapters.inbound.web.dto.LoginRequestDto;
-import com.jakubcitko.handyman.adapters.inbound.web.dto.RegisterRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.*;
 import com.jakubcitko.handyman.core.application.port.in.RegisterCustomerUseCase;
 import com.jakubcitko.handyman.core.application.port.out.LoadUserAccountPort;
 import com.jakubcitko.handyman.core.application.port.out.TokenManagerPort;
@@ -67,7 +65,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDto registerRequest) {
+    public ResponseEntity<SuccessResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequest) {
         var command = new RegisterCustomerUseCase.RegisterCustomerCommand(
                 registerRequest.displayName(),
                 registerRequest.phoneNumber(),
@@ -77,6 +75,6 @@ public class AuthController {
 
         registerCustomerUseCase.registerCustomer(command);
 
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(new SuccessResponseDto("User registered successfully"));
     }
 }

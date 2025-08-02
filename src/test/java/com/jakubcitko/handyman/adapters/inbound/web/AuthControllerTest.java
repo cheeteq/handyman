@@ -3,6 +3,7 @@ package com.jakubcitko.handyman.adapters.inbound.web;
 import com.jakubcitko.handyman.adapters.inbound.web.dto.JwtResponseDto;
 import com.jakubcitko.handyman.adapters.inbound.web.dto.LoginRequestDto;
 import com.jakubcitko.handyman.adapters.inbound.web.dto.RegisterRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.SuccessResponseDto;
 import com.jakubcitko.handyman.core.application.port.in.RegisterCustomerUseCase;
 import com.jakubcitko.handyman.core.application.port.out.LoadUserAccountPort;
 import com.jakubcitko.handyman.core.application.port.out.TokenManagerPort;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -104,12 +107,13 @@ class AuthControllerTest {
         );
 
         // WHEN
-        ResponseEntity<?> response = authController.registerUser(registerRequest);
+        ResponseEntity<SuccessResponseDto> response = authController.registerUser(registerRequest);
 
         // THEN
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("User registered successfully!", response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().isSuccess());
+        assertEquals("User registered successfully", response.getBody().getMessage());
         verify(registerCustomerUseCase, times(1)).registerCustomer(any());
     }
 
