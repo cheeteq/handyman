@@ -40,11 +40,6 @@ public class ServiceRequestEntity extends AbstractAuditableEntity {
     })
     private TimeSlotEmbeddable chosenTimeSlot;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "service_request_attachments", joinColumns = @JoinColumn(name = "service_request_id"))
-    @Column(name = "attachment_id")
-    private List<UUID> attachments;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ServiceRequestStatus status;

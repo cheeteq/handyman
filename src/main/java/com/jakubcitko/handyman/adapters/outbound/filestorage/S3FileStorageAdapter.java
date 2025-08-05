@@ -1,15 +1,10 @@
 package com.jakubcitko.handyman.adapters.outbound.filestorage;
 
-import com.jakubcitko.handyman.core.application.port.in.GenerateUploadUrlUseCase.UploadUrlResponse;
 import com.jakubcitko.handyman.core.application.port.out.FileStoragePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
@@ -17,7 +12,6 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
-import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
@@ -40,8 +34,7 @@ public class S3FileStorageAdapter implements FileStoragePort {
         this.bucketName = bucketName;
     }
     @Override
-    public UploadUrlResponse generatePresignedUploadUrl(String originalFilename, String contentType) {
-        UUID fileUid = UUID.randomUUID();
+    public UploadUrlResponse generatePresignedUploadUrl(UUID fileUid, String contentType) {
         String objectKey = fileUid.toString();
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()

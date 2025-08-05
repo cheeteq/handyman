@@ -3,13 +3,11 @@ package com.jakubcitko.handyman.adapters.outbound.persistence;
 import com.jakubcitko.handyman.AbstractSpringBootTest;
 import com.jakubcitko.handyman.core.domain.model.ServiceRequest;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ServiceRequestPersistenceAdapterTest extends AbstractSpringBootTest {
 
@@ -23,8 +21,7 @@ class ServiceRequestPersistenceAdapterTest extends AbstractSpringBootTest {
         String description = "description_test";
         UUID customerId = UUID.randomUUID();
         UUID addressId = UUID.randomUUID();
-        List<UUID> attachmentList = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        ServiceRequest serviceRequest = ServiceRequest.createNew(title, description, customerId, addressId, attachmentList);
+        ServiceRequest serviceRequest = ServiceRequest.createNew(title, description, customerId, addressId);
         UUID id = serviceRequest.getId();
 
         //WHEN
@@ -35,8 +32,5 @@ class ServiceRequestPersistenceAdapterTest extends AbstractSpringBootTest {
         assertEquals(title, savedServiceRequest.getTitle());
         assertEquals(description, savedServiceRequest.getDescription());
         assertEquals(customerId, savedServiceRequest.getCustomerId());
-
-        assertThat(savedServiceRequest.getAttachments())
-                .containsExactlyElementsOf(attachmentList);
     }
 }

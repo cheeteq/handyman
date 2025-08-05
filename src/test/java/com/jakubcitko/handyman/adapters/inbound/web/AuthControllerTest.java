@@ -1,9 +1,9 @@
 package com.jakubcitko.handyman.adapters.inbound.web;
 
-import com.jakubcitko.handyman.adapters.inbound.web.dto.JwtResponseDto;
-import com.jakubcitko.handyman.adapters.inbound.web.dto.LoginRequestDto;
-import com.jakubcitko.handyman.adapters.inbound.web.dto.RegisterRequestDto;
-import com.jakubcitko.handyman.adapters.inbound.web.dto.SuccessResponseDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.JwtResponseDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.request.LoginRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.request.RegisterRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.SuccessResponseDto;
 import com.jakubcitko.handyman.core.application.port.in.RegisterCustomerUseCase;
 import com.jakubcitko.handyman.core.application.port.out.LoadUserAccountPort;
 import com.jakubcitko.handyman.core.application.port.out.TokenManagerPort;
@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

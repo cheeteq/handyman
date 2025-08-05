@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-public interface PrepareOfferUseCase extends GenerateUploadUrlUseCase {
+public interface PrepareOfferUseCase {
     void prepareOffer(PrepareOfferCommand command);
 
     record PrepareOfferCommand(

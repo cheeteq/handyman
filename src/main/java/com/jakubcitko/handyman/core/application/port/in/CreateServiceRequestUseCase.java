@@ -11,7 +11,7 @@ public interface CreateServiceRequestUseCase {
             String description,
             UUID customerId,
             UUID addressId,
-            List<UUID> attachments
+            List<UUID> attachmentsIds
     ) {
     }
 }

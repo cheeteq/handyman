@@ -1,6 +1,6 @@
 package com.jakubcitko.handyman.adapters.inbound.web;
 
-import com.jakubcitko.handyman.adapters.inbound.web.dto.ErrorResponseDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.ErrorResponseDto;
 import com.jakubcitko.handyman.core.domain.exception.BusinessRuleViolationException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;

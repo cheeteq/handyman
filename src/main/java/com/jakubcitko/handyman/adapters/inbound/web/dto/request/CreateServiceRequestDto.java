@@ -1,4 +1,4 @@
-package com.jakubcitko.handyman.adapters.inbound.web.dto;
+package com.jakubcitko.handyman.adapters.inbound.web.dto.request;
 
 import java.util.List;
 import java.util.UUID;

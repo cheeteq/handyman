@@ -1,5 +1,6 @@
-package com.jakubcitko.handyman.adapters.inbound.web.dto;
+package com.jakubcitko.handyman.adapters.inbound.web.dto.response;
 
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.GenericResponseDto;
 import lombok.Getter;
 import java.util.UUID;
 

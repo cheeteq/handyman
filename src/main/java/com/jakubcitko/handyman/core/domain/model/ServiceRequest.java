@@ -13,7 +13,7 @@ public class ServiceRequest {
     private final String description;
     private final UUID customerId;
     private final UUID addressId;
-    private final List<UUID> attachments;
+    private final List<Attachment> attachments;
     private ServiceRequestStatus status;
     private Offer offer;
     private TimeSlot chosenTimeSlot;
@@ -21,7 +21,7 @@ public class ServiceRequest {
     private BigDecimal costOfParts;
     private String note;
 
-    public ServiceRequest(UUID id, String title, String description, UUID customerId, UUID addressId, List<UUID> attachments) {
+    public ServiceRequest(UUID id, String title, String description, UUID customerId, UUID addressId, List<Attachment> attachments) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,8 +31,8 @@ public class ServiceRequest {
         this.status = ServiceRequestStatus.NEW;
     }
 
-    public static ServiceRequest createNew(String title, String description, UUID customerId, UUID addressId, List<UUID> attachments) {
-        return new ServiceRequest(UUID.randomUUID(), title, description, customerId, addressId, attachments);
+    public static ServiceRequest createNew(String title, String description, UUID customerId, UUID addressId) {
+        return new ServiceRequest(UUID.randomUUID(), title, description, customerId, addressId, null);
     }
 
     public void prepareOffer(BigDecimal estimatedCost, List<TimeSlot> availableTimeSlots) {

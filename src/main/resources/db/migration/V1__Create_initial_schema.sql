@@ -83,12 +83,18 @@ CREATE TABLE offer_available_time_slots
             ON DELETE CASCADE
 );
 
-CREATE TABLE service_request_attachments
+CREATE TABLE attachments
 (
-    service_request_id UUID NOT NULL,
-    attachment_id      UUID NOT NULL,
-    CONSTRAINT fk_sra_service_request
+    id                 UUID PRIMARY KEY,
+    status             VARCHAR(50)              NOT NULL,
+    original_filename  VARCHAR(255)             NOT NULL,
+    content_type       VARCHAR(100)             NOT NULL,
+    file_size          BIGINT                   NOT NULL,
+    uploader_id        UUID                     NOT NULL,
+    creation_date      TIMESTAMP WITH TIME ZONE NOT NULL,
+    service_request_id UUID,
+
+    CONSTRAINT fk_attachment_to_service_request
         FOREIGN KEY (service_request_id)
             REFERENCES service_requests (id)
-            ON DELETE CASCADE
 );

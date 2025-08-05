@@ -1,7 +1,10 @@
 package com.jakubcitko.handyman.adapters.inbound.web;
 
 
-import com.jakubcitko.handyman.adapters.inbound.web.dto.*;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.request.LoginRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.request.RegisterRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.JwtResponseDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.SuccessResponseDto;
 import com.jakubcitko.handyman.core.application.port.in.RegisterCustomerUseCase;
 import com.jakubcitko.handyman.core.application.port.out.LoadUserAccountPort;
 import com.jakubcitko.handyman.core.application.port.out.TokenManagerPort;

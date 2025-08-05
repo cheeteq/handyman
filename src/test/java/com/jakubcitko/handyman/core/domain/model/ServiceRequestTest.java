@@ -24,7 +24,6 @@ public class ServiceRequestTest {
         String description = "test_description";
         UUID customerId = UUID.randomUUID();
         UUID addressId = UUID.randomUUID();
-        List<UUID> attachments = List.of(UUID.randomUUID(), UUID.randomUUID());
 
 
         //WHEN
@@ -32,8 +31,7 @@ public class ServiceRequestTest {
                 title,
                 description,
                 customerId,
-                addressId,
-                attachments
+                addressId
         );
 
         //THEN
@@ -43,7 +41,6 @@ public class ServiceRequestTest {
         assertEquals(description, createdRequest.getDescription());
         assertEquals(customerId, createdRequest.getCustomerId());
         assertEquals(addressId, createdRequest.getAddressId());
-        assertEquals(attachments, createdRequest.getAttachments());
         assertEquals(ServiceRequestStatus.NEW, createdRequest.getStatus());
     }
 
@@ -232,8 +229,7 @@ public class ServiceRequestTest {
                 "test_title",
                 "test_description",
                 UUID.randomUUID(),
-                UUID.randomUUID(),
-                List.of(UUID.randomUUID())
+                UUID.randomUUID()
         );
     }
 }

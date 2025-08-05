@@ -26,9 +26,9 @@ public class ServiceRequestPersistenceAdapter implements ServiceRequestRepositor
     }
 
     @Override
-    public UUID save(ServiceRequest serviceRequest) {
+    public void save(ServiceRequest serviceRequest) {
         var entity = mapper.toEntity(serviceRequest);
-        return jpaRepository.save(entity).getId();
+        jpaRepository.save(entity);
     }
 
     @Override

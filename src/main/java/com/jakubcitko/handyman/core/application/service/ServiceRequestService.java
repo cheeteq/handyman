@@ -1,17 +1,19 @@
 package com.jakubcitko.handyman.core.application.service;
 
 import com.jakubcitko.handyman.core.application.port.in.CreateServiceRequestUseCase;
+import com.jakubcitko.handyman.core.application.port.out.AttachmentRepositoryPort;
 import com.jakubcitko.handyman.core.application.port.out.CustomerRepositoryPort;
 import com.jakubcitko.handyman.core.application.port.out.FileStoragePort;
 import com.jakubcitko.handyman.core.application.port.out.ServiceRequestRepositoryPort;
 import com.jakubcitko.handyman.core.domain.exception.BusinessRuleViolationException;
+import com.jakubcitko.handyman.core.domain.model.Attachment;
 import com.jakubcitko.handyman.core.domain.model.Customer;
 import com.jakubcitko.handyman.core.domain.model.ServiceRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -21,28 +23,68 @@ public class ServiceRequestService implements CreateServiceRequestUseCase {
     private final ServiceRequestRepositoryPort serviceRequestRepository;
     private final CustomerRepositoryPort customerRepository;
     private final FileStoragePort fileStoragePort;
+    private final AttachmentRepositoryPort attachmentRepository;
 
-    public ServiceRequestService(ServiceRequestRepositoryPort serviceRequestRepository, CustomerRepositoryPort customerRepository, FileStoragePort fileStoragePort) {
+    public ServiceRequestService(
+            ServiceRequestRepositoryPort serviceRequestRepository,
+            CustomerRepositoryPort customerRepository,
+            FileStoragePort fileStoragePort, AttachmentRepositoryPort attachmentRepository
+    ) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.customerRepository = customerRepository;
         this.fileStoragePort = fileStoragePort;
+        this.attachmentRepository = attachmentRepository;
     }
 
     @Override
     public UUID createServiceRequest(CreateServiceRequestCommand command) {
-
         validateAddressOwnership(command.customerId(), command.addressId());
-        validateAttachments(command.attachments());
+
+        List<Attachment> attachmentsToAssign = validateAndGetAttachments(
+                command.customerId(),
+                command.attachmentsIds()
+        );
 
         ServiceRequest request = ServiceRequest.createNew(
                 command.title(),
                 command.description(),
                 command.customerId(),
-                command.addressId(),
-                command.attachments()
+                command.addressId()
         );
 
-        return serviceRequestRepository.save(request);
+        serviceRequestRepository.save(request);
+
+        for (Attachment attachment : attachmentsToAssign) {
+            Attachment updatedAttachment = attachment.assignToServiceRequest(request.getId());
+            attachmentRepository.save(updatedAttachment);
+        }
+
+        return request.getId();
+    }
+
+    private List<Attachment> validateAndGetAttachments(UUID customerId, List<UUID> attachmentIds) {
+        if (attachmentIds == null || attachmentIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Attachment> foundAttachments = attachmentRepository.findAllByIds(attachmentIds);
+
+        if (foundAttachments.size() != attachmentIds.size()) {
+            throw new BusinessRuleViolationException("One or more attachments could not be found.");
+        }
+
+        boolean allValid = foundAttachments.stream().allMatch(att ->
+                att.uploaderId().equals(customerId) && att.serviceRequestId() == null
+        );
+
+        if (!allValid) {
+            throw new BusinessRuleViolationException("One or more attachments are invalid...");
+        }
+
+        if (!fileStoragePort.doObjectsExist(attachmentIds)) {
+            throw new BusinessRuleViolationException("One or more attachments could not be found in the file storage. The upload may have failed.");
+        }
+
+        return foundAttachments;
     }
 
 
@@ -56,17 +98,6 @@ public class ServiceRequestService implements CreateServiceRequestUseCase {
         if (!addressBelongsToCustomer) {
             throw new BusinessRuleViolationException(
                     "Address with id %s does not belong to customer %s.", addressId, customerId
-            );
-        }
-    }
-
-    private void validateAttachments(List<UUID> attachmentIds) {
-        if (Objects.isNull(attachmentIds) || attachmentIds.isEmpty())
-            return;
-        boolean allAttachmentsExists = fileStoragePort.doObjectsExist(attachmentIds);
-        if (!allAttachmentsExists) {
-            throw new BusinessRuleViolationException(
-                    "Some of attachments not found: %s", attachmentIds.toString()
             );
         }
     }

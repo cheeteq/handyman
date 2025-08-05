@@ -1,11 +1,10 @@
 package com.jakubcitko.handyman.adapters.inbound.web;
 
 import com.jakubcitko.handyman.adapters.inbound.security.AuthService;
-import com.jakubcitko.handyman.adapters.inbound.web.dto.*;
-import com.jakubcitko.handyman.core.application.port.in.AddAddressToCustomerUseCase;
-import com.jakubcitko.handyman.core.application.port.in.CreateServiceRequestUseCase;
-import com.jakubcitko.handyman.core.application.port.in.GetCustomerAddressesUseCase;
-import com.jakubcitko.handyman.core.application.port.in.GetCustomerRequestsUseCase;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.request.AddAddressRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.request.CreateServiceRequestDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.*;
+import com.jakubcitko.handyman.core.application.port.in.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +21,16 @@ public class CustomerController {
     private final AddAddressToCustomerUseCase addAddressUseCase;
     private final GetCustomerAddressesUseCase getCustomerAddressesUseCase;
     private final CreateServiceRequestUseCase createServiceRequestUseCase;
-    private final GetCustomerRequestsUseCase getCustomerRequestsUseCase;
+    private final GetCustomerRequestsSummariesUseCase getCustomerRequestsSummariesUseCase;
+    private final GetCustomerRequestDetailsUseCase getCustomerRequestDetailsUseCase;
 
-    public CustomerController(AuthService authService, AddAddressToCustomerUseCase addAddressUseCase, GetCustomerAddressesUseCase getCustomerAddressesUseCase, CreateServiceRequestUseCase createServiceRequestUseCase, GetCustomerRequestsUseCase getCustomerRequestsUseCase) {
+    public CustomerController(AuthService authService, AddAddressToCustomerUseCase addAddressUseCase, GetCustomerAddressesUseCase getCustomerAddressesUseCase, CreateServiceRequestUseCase createServiceRequestUseCase, GetCustomerRequestsSummariesUseCase getCustomerRequestsSummariesUseCase, GetCustomerRequestDetailsUseCase getCustomerRequestDetailsUseCase) {
         this.authService = authService;
         this.addAddressUseCase = addAddressUseCase;
         this.getCustomerAddressesUseCase = getCustomerAddressesUseCase;
         this.createServiceRequestUseCase = createServiceRequestUseCase;
-        this.getCustomerRequestsUseCase = getCustomerRequestsUseCase;
+        this.getCustomerRequestsSummariesUseCase = getCustomerRequestsSummariesUseCase;
+        this.getCustomerRequestDetailsUseCase = getCustomerRequestDetailsUseCase;
     }
 
     @PostMapping("/me/addresses")
@@ -80,9 +81,16 @@ public class CustomerController {
 
     @GetMapping("/me/requests")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public ResponseEntity<List<CustomerRequestSummaryDto>> getServiceRequestsForCustomer() {
-        var query = new GetCustomerRequestsUseCase.GetCustomerRequestsQuery(authService.getLoggedUserId());
-        return ResponseEntity.ok(getCustomerRequestsUseCase.getRequestsForCustomer(query));
+    public ResponseEntity<List<CustomerRequestSummaryResponseDto>> getServiceRequestsForCustomer() {
+        var query = new GetCustomerRequestsSummariesUseCase.GetCustomerRequestsQuery(authService.getLoggedUserId());
+        return ResponseEntity.ok(getCustomerRequestsSummariesUseCase.getRequestsForCustomer(query));
+    }
+
+    @GetMapping("/me/requests/{requestId}")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    public ResponseEntity<CustomerRequestDetailsResponseDto> getServiceRequestsForCustomer(@PathVariable UUID requestId) {
+        var query = new GetCustomerRequestDetailsUseCase.GetCustomerRequestDetailsQuery(requestId, authService.getLoggedUserId());
+        return ResponseEntity.of(getCustomerRequestDetailsUseCase.getDetails(query));
     }
 
 

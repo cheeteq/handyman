@@ -1,6 +1,6 @@
 package com.jakubcitko.handyman.core.application.port.in;
 
-import com.jakubcitko.handyman.adapters.inbound.web.dto.AddressResponseDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.AddressResponseDto;
 
 import java.util.List;
 import java.util.UUID;

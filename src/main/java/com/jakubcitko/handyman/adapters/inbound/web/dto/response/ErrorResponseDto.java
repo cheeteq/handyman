@@ -1,4 +1,4 @@
-package com.jakubcitko.handyman.adapters.inbound.web.dto;
+package com.jakubcitko.handyman.adapters.inbound.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

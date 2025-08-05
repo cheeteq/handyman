@@ -1,6 +1,6 @@
 package com.jakubcitko.handyman.core.application.service;
 
-import com.jakubcitko.handyman.adapters.inbound.web.dto.AddressResponseDto;
+import com.jakubcitko.handyman.adapters.inbound.web.dto.response.AddressResponseDto;
 import com.jakubcitko.handyman.core.application.port.in.AddAddressToCustomerUseCase;
 import com.jakubcitko.handyman.core.application.port.in.GetCustomerAddressesUseCase;
 import com.jakubcitko.handyman.core.application.port.in.RegisterCustomerUseCase;
