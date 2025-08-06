@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserPersistenceAdapterTest extends AbstractSpringBootTest {
     @Autowired
@@ -35,6 +34,28 @@ class UserPersistenceAdapterTest extends AbstractSpringBootTest {
         assertEquals(email, savedUser.getEmail());
         assertEquals(password, savedUser.getPasswordHash());
         Assertions.assertThat(savedUser.getRoles())
+                .containsExactlyElementsOf(roles);
+    }
+
+    @Test
+    void test_loadUserByEmail() {
+        //GIVEN
+        String email = "test@mail.com";
+        String password = "hashedPassword";
+        Set<Role> roles = Set.of(Role.ROLE_CUSTOMER);
+        User user = User.register(email, password, roles);
+        UUID id = user.getId();
+        persistenceAdapter.save(user);
+
+        //WHEN
+        var foundUser = persistenceAdapter.loadUserByEmail(email).orElseThrow();
+
+        //Then
+        assertNotNull(foundUser);
+        assertEquals(id, foundUser.id());
+        assertEquals(email, foundUser.email());
+        assertEquals(password, foundUser.passwordHash());
+        Assertions.assertThat(foundUser.roles())
                 .containsExactlyElementsOf(roles);
     }
 
